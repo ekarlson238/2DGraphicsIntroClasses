@@ -77,7 +77,7 @@ class Image
 	}
 
     /// <summary>
-    /// Clear the screen
+    /// Clears the screen by setting each bit in the bitmap to 0
     /// </summary>
 	public void Clear ()
 	{
@@ -180,6 +180,11 @@ class Image
 		}
 	}
 
+    /// <summary>
+    /// uses a BinaryWriter to write the header's unsigned bytes to the current stream and advances the stream position by one byte
+    /// </summary>
+    /// <param name="writer">Writes an unsigned byte to the current stream and advances the stream position by one byte.</param>
+    /// <param name="header"></param>
 	static void WriteTo (BinaryWriter writer, TGAHeader header)
 	{
 		writer.Write (header.IdLength);
@@ -284,6 +289,14 @@ class Image
 		} while (currentpixel < pixelcount);
 	}
 
+    /// <summary>
+    /// Takes in the Bits-Per-Pixel (bpp) as an int and converts it back into a format and
+    /// takes that format and decides whether it has been compressed or not based on whether rle is true or false and returns
+    /// a data type based on that
+    /// </summary>
+    /// <param name="bpp">Bits-Per-Pixel</param>
+    /// <param name="rle">Run-length Encoder</param>
+    /// <returns>returns a data type</returns>
 	static DataType DataTypeFor (int bpp, bool rle)
 	{
 		var format = (Format)bpp;
