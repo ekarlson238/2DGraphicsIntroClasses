@@ -1,0 +1,1 @@
+﻿Copied or adapted from https://github.com/xamarin/Workbooks/tree/master/graphics/tiny-renderer.  That work, in turn, adapted from https://github.com/ssloy/tinyrenderer/wiki)
