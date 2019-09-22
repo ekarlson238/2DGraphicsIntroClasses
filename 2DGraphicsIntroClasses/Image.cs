@@ -1,20 +1,49 @@
 using System;
 using System.IO;
 
+/// <summary>
+/// This is the class used to draw images to the screen.
+/// </summary>
 class Image
 {
+    /// <summary>
+    /// The bitmap
+    /// </summary>
 	internal byte [] buffer;
 
+    /// <summary>
+    /// The width of the image
+    /// </summary>
 	public int Width { get; }
+
+    /// <summary>
+    /// The height of the image
+    /// </summary>
 	public int Height { get; }
+
+    /// <summary>
+    /// The colour format of the image (RGB, Greyscale or RGBA)
+    /// </summary>
 	public Format Format { get; }
 
+    /// <summary>
+    /// The number of bytes per row for the specified format
+    /// Greyscale = 1 bytes
+    /// RGB = 3 bytes
+    /// RGBA = 4 bytes
+    /// </summary>
 	public int BytesPerRow {
 		get {
 			return Width * (int)Format;
 		}
 	}
 
+    /// <summary>
+    /// Records the size of the image in bytes
+    /// </summary>
+    /// <param name="width">The width of the image</param>
+    /// <param name="height">The height of the image</param>
+    /// <param name="format">The number of bytes per row for the specified format</param>
 	public Image (int width, int height, Format format)
 	{
 		Width = width;
@@ -23,12 +52,17 @@ class Image
 
 		buffer = new byte [height * BytesPerRow];
 	}
-
+    
+    /// <summary>
+    /// Vertically inverts the image to make it appear upside-down
+    /// </summary>
 	public void VerticalFlip ()
 	{
+        // The number of bytes per pixel (bpp) based on what format the image is in
 		var bpp = (int)Format;
 		int bytesPerLine = Width * bpp;
 
+        // Right shifts to get rid of the lowest ordered bit
 		var half = Height >> 1;
 		for (int l = 0; l < half; l++) {
 			var l1 = l * bytesPerLine;
@@ -42,12 +76,21 @@ class Image
 		}
 	}
 
+    /// <summary>
+    /// Clear the screen
+    /// </summary>
 	public void Clear ()
 	{
 		for (int i = 0; i < buffer.Length; i++)
 			buffer [i] = 0;
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
 	public Color this [int x, int y] {
 		get {
 			if (x < 0 || x >= Width) throw new ArgumentException ("x");
