@@ -156,6 +156,11 @@ class Image
 		return true;
 	}
 
+    /// <summary>
+    /// Loads image using the given path
+    /// </summary>
+    /// <param name="path">The path and name of the file to be loaded</param>
+    /// <returns>The Loaded Image</returns>
 	public static Image Load (string path)
 	{
 		using (var reader = new BinaryReader (File.OpenRead (path))) {
