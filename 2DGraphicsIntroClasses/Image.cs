@@ -86,10 +86,10 @@ class Image
 	}
 
     /// <summary>
-    /// 
+    /// Gets or sets the color of the pixel at the given coordinate
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="x">X coordinate</param>
+    /// <param name="y">Y coordinate</param>
     /// <returns></returns>
 	public Color this [int x, int y] {
 		get {
@@ -116,11 +116,24 @@ class Image
 		}
 	}
 
+    /// <summary>
+    /// Offsets the position of the image on the canvas
+    /// </summary>
+    /// <param name="x">Horizontal position</param>
+    /// <param name="y">Vertical Position</param>
+    /// <returns></returns>
 	int GetOffset (int x, int y)
 	{
 		return y * BytesPerRow + x * (int)Format;
 	}
 
+    /// <summary>
+    /// Creates a file in the specific path for the output stream.  Writes the header to the stream and then, 
+    /// if the file is not compressed, writes the buffer data to the stream. If the file is compressed, decompress it.
+    /// </summary>
+    /// <param name="path">The path and name of the file to create.</param>
+    /// <param name="rle">True if the data is compressed, false if it is not.</param>
+    /// <returns>Always returns true</returns>
 	public bool WriteToFile (string path, bool rle = true)
 	{
 		var bpp = (int)Format;
@@ -184,7 +197,8 @@ class Image
     /// uses a BinaryWriter to write the header's unsigned bytes to the current stream and advances the stream position by one byte
     /// </summary>
     /// <param name="writer">Writes an unsigned byte to the current stream and advances the stream position by one byte.</param>
-    /// <param name="header"></param>
+    /// <param name="header">files include headers that define the image size, number of colors, and other information needed to display the image. 
+    /// http://www.fastgraph.com/help/image_file_header_formats.html</param>
 	static void WriteTo (BinaryWriter writer, TGAHeader header)
 	{
 		writer.Write (header.IdLength);
@@ -201,6 +215,12 @@ class Image
 		writer.Write (header.ImageDescriptor);
 	}
 
+    /// <summary>
+    /// Reads the underlying stream to create a header
+    /// </summary>
+    /// <param name="reader">Reads characters from the underlying stream and advances the current position of the stream in accordance 
+    /// with the Encoding used and the specific character being read from the stream.</param>
+    /// <returns>Returns the header that was created</returns>
 	static TGAHeader ReadHeader (BinaryReader reader)
 	{
 		var header = new TGAHeader {
@@ -220,6 +240,11 @@ class Image
 		return header;
 	}
 
+    /// <summary>
+    /// Uses a writer to decompress the data from the RLE
+    /// </summary>
+    /// <param name="writer">Writes an unsigned byte to the current stream and advances the stream position by one byte.</param>
+    /// <returns>Returns true when it's finished decompressing</returns>
 	bool UnloadRleData (BinaryWriter writer)
 	{
 		const int max_chunk_length = 128;
@@ -255,6 +280,11 @@ class Image
 		return true;
 	}
 
+    /// <summary>
+    /// Uses a reader to compress the data using the Run-Length Encoder
+    /// </summary>
+    /// <param name="reader">Reads characters from the underlying stream and advances the current position of the stream in accordance 
+    /// with the Encoding used and the specific character being read from the stream.</param>
 	void LoadRleData (BinaryReader reader)
 	{
 		var pixelcount = Width * Height;
