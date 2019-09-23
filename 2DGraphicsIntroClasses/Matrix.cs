@@ -1,312 +1,373 @@
 using System;
 
-public struct Matrix4
+
+public struct Matrix2
 {
-	public const int Len = 4;
+    public const int Len = 2;
 
-	public float R0C0, R0C1, R0C2, R0C3;
-	public float R1C0, R1C1, R1C2, R1C3;
-	public float R2C0, R2C1, R2C2, R2C3;
-	public float R3C0, R3C1, R3C2, R3C3;
+    public float R0C0, R0C1;
+    public float R1C0, R1C1;
 
-	public float this [int row, int column] {
-		get {
-			switch (row) {
-			case 0:
-				switch (column) {
-				case 0: return R0C0;
-				case 1: return R0C1;
-				case 2: return R0C2;
-				case 3: return R0C3;
-				}
-				break;
+    public float this[int row, int column]
+    {
+        get
+        {
+            switch (row)
+            {
+                case 0:
+                    switch (column)
+                    {
+                        case 0: return R0C0;
+                        case 1: return R0C1;
+                    }
+                    break;
 
-			case 1:
-				switch (column) {
-				case 0: return R1C0;
-				case 1: return R1C1;
-				case 2: return R1C2;
-				case 3: return R1C3;
-				}
-				break;
+                case 1:
+                    switch (column)
+                    {
+                        case 0: return R1C0;
+                        case 1: return R1C1;
+                    }
+                    break;
+            }
 
-			case 2:
-				switch (column) {
-				case 0: return R2C0;
-				case 1: return R2C1;
-				case 2: return R2C2;
-				case 3: return R2C3;
-				}
-				break;
+            throw new IndexOutOfRangeException();
+        }
+        set
+        {
+            switch (row)
+            {
+                case 0:
+                    switch (column)
+                    {
+                        case 0: R0C0 = value; return;
+                        case 1: R0C1 = value; return;
+                    }
+                    break;
 
-			case 3:
-				switch (column) {
-				case 0: return R3C0;
-				case 1: return R3C1;
-				case 2: return R3C2;
-				case 3: return R3C3;
-				}
-				break;
-			}
+                case 1:
+                    switch (column)
+                    {
+                        case 0: R1C0 = value; return;
+                        case 1: R1C1 = value; return;
+                    }
+                    break;
+            }
 
-			throw new IndexOutOfRangeException ();
-		}
-		set {
-			switch (row) {
-			case 0:
-				switch (column) {
-				case 0: R0C0 = value; return;
-				case 1: R0C1 = value; return;
-				case 2: R0C2 = value; return;
-				case 3: R0C3 = value; return;
-				}
-				break;
-
-			case 1:
-				switch (column) {
-				case 0: R1C0 = value; return;
-				case 1: R1C1 = value; return;
-				case 2: R1C2 = value; return;
-				case 3: R1C3 = value; return;
-				}
-				break;
-
-			case 2:
-				switch (column) {
-				case 0: R2C0 = value; return;
-				case 1: R2C1 = value; return;
-				case 2: R2C2 = value; return;
-				case 3: R2C3 = value; return;
-				}
-				break;
-
-			case 3:
-				switch (column) {
-				case 0: R3C0 = value; return;
-				case 1: R3C1 = value; return;
-				case 2: R3C2 = value; return;
-				case 3: R3C3 = value; return;
-				}
-				break;
-			}
-
-			throw new IndexOutOfRangeException ();
-		}
-	}
-
-	public Matrix4 Transpose ()
-	{
-		return new Matrix4 {
-			R0C0 = R0C0, R0C1 = R1C0, R0C2 = R2C0, R0C3 = R3C0,
-			R1C0 = R0C1, R1C1 = R1C1, R1C2 = R2C1, R1C3 = R3C1,
-			R2C0 = R0C2, R2C1 = R1C2, R2C2 = R2C2, R2C3 = R3C2,
-			R3C0 = R0C3, R3C1 = R1C3, R3C2 = R2C3, R3C3 = R3C3
-		};
-	}
-
-
-	public static Matrix4 Identity ()
-	{
-		return new Matrix4 { R0C0 = 1, R1C1 = 1, R2C2 = 1, R3C3 = 1 };
-	}
-
-	public static Matrix4 Zoom (float scale)
-	{
-		return new Matrix4 { R0C0 = scale, R1C1 = scale, R2C2 = scale, R3C3 = scale };
-	}
-
-	public static Matrix4 RotationZ (float angle)
-	{
-		var cosangle = (float)Math.Cos (angle);
-		var sinangle = (float)Math.Sin (angle);
-
-		var R = Identity ();
-		R [0, 0] = R [1, 1] = cosangle;
-		R [0, 1] = -sinangle;
-		R [1, 0] = sinangle;
-
-		return R;
-	}
-
-
-	public static Matrix4 operator * (Matrix4 l, Matrix4 r)
-	{
-		var result = new Matrix4 ();
-		for (int i = 0; i < Len; i++) {
-			for (int j = 0; j < Len; j++) {
-				result [i, j] = 0;
-				for (int k = 0; k < Len; k++) {
-					result [i, j] += l [i, k] * r [k, j];
-				}
-			}
-		}
-		return result;
-	}
-
-	public override string ToString ()
-	{
-		var sb = new System.Text.StringBuilder ();
-		for (int r = 0; r < Len; r++) {
-			for (int c = 0; c < Len; c++)
-				sb.Append (this[r, c]).Append (" ");
-			sb.AppendLine ();
-		}
-		return sb.ToString ();
-	}
+            throw new IndexOutOfRangeException();
+        }
+    }
 }
 
 public struct Matrix3
 {
-	public const int Len = 3;
+    public const int Len = 3;
 
-	public float R0C0, R0C1, R0C2;
-	public float R1C0, R1C1, R1C2;
-	public float R2C0, R2C1, R2C2;
+    public float R0C0, R0C1, R0C2;
+    public float R1C0, R1C1, R1C2;
+    public float R2C0, R2C1, R2C2;
 
-	public float this [int row, int column] {
-		get {
-			switch (row) {
-			case 0:
-				switch (column) {
-				case 0: return R0C0;
-				case 1: return R0C1;
-				case 2: return R0C2;
-				}
-				break;
+    public float this[int row, int column]
+    {
+        get
+        {
+            switch (row)
+            {
+                case 0:
+                    switch (column)
+                    {
+                        case 0: return R0C0;
+                        case 1: return R0C1;
+                        case 2: return R0C2;
+                    }
+                    break;
 
-			case 1:
-				switch (column) {
-				case 0: return R1C0;
-				case 1: return R1C1;
-				case 2: return R1C2;
-				}
-				break;
+                case 1:
+                    switch (column)
+                    {
+                        case 0: return R1C0;
+                        case 1: return R1C1;
+                        case 2: return R1C2;
+                    }
+                    break;
 
-			case 2:
-				switch (column) {
-				case 0: return R2C0;
-				case 1: return R2C1;
-				case 2: return R2C2;
-				}
-				break;
-			}
+                case 2:
+                    switch (column)
+                    {
+                        case 0: return R2C0;
+                        case 1: return R2C1;
+                        case 2: return R2C2;
+                    }
+                    break;
+            }
 
-			throw new IndexOutOfRangeException ();
-		}
-		set {
-			switch (row) {
-			case 0:
-				switch (column) {
-				case 0: R0C0 = value; return;
-				case 1: R0C1 = value; return;
-				case 2: R0C2 = value; return;
-				}
-				break;
+            throw new IndexOutOfRangeException();
+        }
+        set
+        {
+            switch (row)
+            {
+                case 0:
+                    switch (column)
+                    {
+                        case 0: R0C0 = value; return;
+                        case 1: R0C1 = value; return;
+                        case 2: R0C2 = value; return;
+                    }
+                    break;
 
-			case 1:
-				switch (column) {
-				case 0: R1C0 = value; return;
-				case 1: R1C1 = value; return;
-				case 2: R1C2 = value; return;
-				}
-				break;
+                case 1:
+                    switch (column)
+                    {
+                        case 0: R1C0 = value; return;
+                        case 1: R1C1 = value; return;
+                        case 2: R1C2 = value; return;
+                    }
+                    break;
 
-			case 2:
-				switch (column) {
-				case 0: R2C0 = value; return;
-				case 1: R2C1 = value; return;
-				case 2: R2C2 = value; return;
-				}
-				break;
-			}
+                case 2:
+                    switch (column)
+                    {
+                        case 0: R2C0 = value; return;
+                        case 1: R2C1 = value; return;
+                        case 2: R2C2 = value; return;
+                    }
+                    break;
+            }
 
-			throw new IndexOutOfRangeException ();
-		}
-	}
+            throw new IndexOutOfRangeException();
+        }
+    }
 
-	public Matrix3 Transpose ()
-	{
-		return new Matrix3 {
-			R0C0 = R0C0, R0C1 = R1C0, R0C2 = R2C0,
-			R1C0 = R0C1, R1C1 = R1C1, R1C2 = R2C1,
-			R2C0 = R0C2, R2C1 = R1C2, R2C2 = R2C2
-		};
-	}
+    public Matrix3 Transpose()
+    {
+        return new Matrix3
+        {
+            R0C0 = R0C0,
+            R0C1 = R1C0,
+            R0C2 = R2C0,
+            R1C0 = R0C1,
+            R1C1 = R1C1,
+            R1C2 = R2C1,
+            R2C0 = R0C2,
+            R2C1 = R1C2,
+            R2C2 = R2C2
+        };
+    }
 
-	public void SetColumn (int col, Vec3f v)
-	{
-		this [0, col] = v.x;
-		this [1, col] = v.y;
-		this [2, col] = v.z;
-	}
+    public void SetColumn(int col, Vec3f v)
+    {
+        this[0, col] = v.x;
+        this[1, col] = v.y;
+        this[2, col] = v.z;
+    }
 
-	public void SetRow (int row, Vec3f v)
-	{
-		this [row, 0] = v.x;
-		this [row, 1] = v.y;
-		this [row, 2] = v.z;
-	}
+    public void SetRow(int row, Vec3f v)
+    {
+        this[row, 0] = v.x;
+        this[row, 1] = v.y;
+        this[row, 2] = v.z;
+    }
 
-	public override string ToString ()
-	{
-		var sb = new System.Text.StringBuilder ();
-		for (int r = 0; r < Len; r++) {
-			for (int c = 0; c < Len; c++)
-				sb.Append (this [r, c]).Append (" ");
-			sb.AppendLine ();
-		}
-		return sb.ToString ();
-	}
+    public override string ToString()
+    {
+        var sb = new System.Text.StringBuilder();
+        for (int r = 0; r < Len; r++)
+        {
+            for (int c = 0; c < Len; c++)
+                sb.Append(this[r, c]).Append(" ");
+            sb.AppendLine();
+        }
+        return sb.ToString();
+    }
 }
 
-public struct Matrix2
+public struct Matrix4
 {
-	public const int Len = 2;
+    public const int Len = 4;
 
-	public float R0C0, R0C1;
-	public float R1C0, R1C1;
+    public float R0C0, R0C1, R0C2, R0C3;
+    public float R1C0, R1C1, R1C2, R1C3;
+    public float R2C0, R2C1, R2C2, R2C3;
+    public float R3C0, R3C1, R3C2, R3C3;
 
-	public float this [int row, int column] {
-		get {
-			switch (row) {
-			case 0:
-				switch (column) {
-				case 0: return R0C0;
-				case 1: return R0C1;
-				}
-				break;
+    public float this[int row, int column]
+    {
+        get
+        {
+            switch (row)
+            {
+                case 0:
+                    switch (column)
+                    {
+                        case 0: return R0C0;
+                        case 1: return R0C1;
+                        case 2: return R0C2;
+                        case 3: return R0C3;
+                    }
+                    break;
 
-			case 1:
-				switch (column) {
-				case 0: return R1C0;
-				case 1: return R1C1;
-				}
-				break;
-			}
+                case 1:
+                    switch (column)
+                    {
+                        case 0: return R1C0;
+                        case 1: return R1C1;
+                        case 2: return R1C2;
+                        case 3: return R1C3;
+                    }
+                    break;
 
-			throw new IndexOutOfRangeException ();
-		}
-		set {
-			switch (row) {
-			case 0:
-				switch (column) {
-				case 0: R0C0 = value; return;
-				case 1: R0C1 = value; return;
-				}
-				break;
+                case 2:
+                    switch (column)
+                    {
+                        case 0: return R2C0;
+                        case 1: return R2C1;
+                        case 2: return R2C2;
+                        case 3: return R2C3;
+                    }
+                    break;
 
-			case 1:
-				switch (column) {
-				case 0: R1C0 = value; return;
-				case 1: R1C1 = value; return;
-				}
-				break;
-			}
+                case 3:
+                    switch (column)
+                    {
+                        case 0: return R3C0;
+                        case 1: return R3C1;
+                        case 2: return R3C2;
+                        case 3: return R3C3;
+                    }
+                    break;
+            }
 
-			throw new IndexOutOfRangeException ();
-		}
-	}
+            throw new IndexOutOfRangeException();
+        }
+        set
+        {
+            switch (row)
+            {
+                case 0:
+                    switch (column)
+                    {
+                        case 0: R0C0 = value; return;
+                        case 1: R0C1 = value; return;
+                        case 2: R0C2 = value; return;
+                        case 3: R0C3 = value; return;
+                    }
+                    break;
+
+                case 1:
+                    switch (column)
+                    {
+                        case 0: R1C0 = value; return;
+                        case 1: R1C1 = value; return;
+                        case 2: R1C2 = value; return;
+                        case 3: R1C3 = value; return;
+                    }
+                    break;
+
+                case 2:
+                    switch (column)
+                    {
+                        case 0: R2C0 = value; return;
+                        case 1: R2C1 = value; return;
+                        case 2: R2C2 = value; return;
+                        case 3: R2C3 = value; return;
+                    }
+                    break;
+
+                case 3:
+                    switch (column)
+                    {
+                        case 0: R3C0 = value; return;
+                        case 1: R3C1 = value; return;
+                        case 2: R3C2 = value; return;
+                        case 3: R3C3 = value; return;
+                    }
+                    break;
+            }
+
+            throw new IndexOutOfRangeException();
+        }
+    }
+
+    public Matrix4 Transpose()
+    {
+        return new Matrix4
+        {
+            R0C0 = R0C0,
+            R0C1 = R1C0,
+            R0C2 = R2C0,
+            R0C3 = R3C0,
+            R1C0 = R0C1,
+            R1C1 = R1C1,
+            R1C2 = R2C1,
+            R1C3 = R3C1,
+            R2C0 = R0C2,
+            R2C1 = R1C2,
+            R2C2 = R2C2,
+            R2C3 = R3C2,
+            R3C0 = R0C3,
+            R3C1 = R1C3,
+            R3C2 = R2C3,
+            R3C3 = R3C3
+        };
+    }
+
+
+    public static Matrix4 Identity()
+    {
+        return new Matrix4 { R0C0 = 1, R1C1 = 1, R2C2 = 1, R3C3 = 1 };
+    }
+
+    public static Matrix4 Zoom(float scale)
+    {
+        return new Matrix4 { R0C0 = scale, R1C1 = scale, R2C2 = scale, R3C3 = scale };
+    }
+
+    public static Matrix4 RotationZ(float angle)
+    {
+        var cosangle = (float)Math.Cos(angle);
+        var sinangle = (float)Math.Sin(angle);
+
+        var R = Identity();
+        R[0, 0] = R[1, 1] = cosangle;
+        R[0, 1] = -sinangle;
+        R[1, 0] = sinangle;
+
+        return R;
+    }
+
+
+    public static Matrix4 operator *(Matrix4 l, Matrix4 r)
+    {
+        var result = new Matrix4();
+        for (int i = 0; i < Len; i++)
+        {
+            for (int j = 0; j < Len; j++)
+            {
+                result[i, j] = 0;
+                for (int k = 0; k < Len; k++)
+                {
+                    result[i, j] += l[i, k] * r[k, j];
+                }
+            }
+        }
+        return result;
+    }
+
+    public override string ToString()
+    {
+        var sb = new System.Text.StringBuilder();
+        for (int r = 0; r < Len; r++)
+        {
+            for (int c = 0; c < Len; c++)
+                sb.Append(this[r, c]).Append(" ");
+            sb.AppendLine();
+        }
+        return sb.ToString();
+    }
 }
+
+
 
 // we don't want to declare them in Matrix because we don't need them in lesson which introduces Matrix class
 static class MatrixHelpers
