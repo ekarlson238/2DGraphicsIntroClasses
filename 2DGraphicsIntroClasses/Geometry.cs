@@ -1,5 +1,7 @@
 using System;
-
+/// <summary>
+/// Struct for Vector2 floats which contains classes and operator overloads for handling 2D Vectors
+/// </summary>
 struct Vec2f
 {
     /// <summary>
@@ -51,7 +53,7 @@ struct Vec2f
     /// <summary>
     /// Individually divides the x and y coordinate by a number
     /// </summary>
-    /// <param name="v">The to be divided</param>
+    /// <param name="v">The Vector to be divided</param>
     /// <param name="num">The number to divide the vector by</param>
     /// <returns>The new vector</returns>
 	public static Vec2f operator / (Vec2f v, float num)
@@ -63,9 +65,9 @@ struct Vec2f
 	}
 
     /// <summary>
-    /// Individually multiplies the x and y coordinate by a number
+    /// Individually multiplies the x and y coordinates by a number
     /// </summary>
-    /// <param name="v">The to be multiplied</param>
+    /// <param name="v">The Vector to be multiplied</param>
     /// <param name="num">The number to multipy the vector by</param>
     /// <returns>The new vector</returns>
 	public static Vec2f operator * (Vec2f v, float num)
@@ -116,6 +118,11 @@ public struct Vec3f
     /// </summary>
 	public float z;
 
+    /// <summary>
+    /// Turns the coordinates (x, y, z) into an array with x being in the zero position, y in the one position, and z in the two position
+    /// </summary>
+    /// <param name="i">The position in the array</param>
+    /// <returns> x in the zero poisiton, y in the second, z in the third</returns>
 	public float this [int i] {
 		get {
 			switch (i) {
@@ -135,21 +142,41 @@ public struct Vec3f
 		}
 	}
 
+    /// <summary>
+    /// Divides by the absolute value to equal zero, one, or two to signify direction
+    /// </summary>
+    /// <returns> Zero, one, or two to signify direction </returns>
 	public Vec3f Normalize ()
 	{
 		return this / Norm ();
 	}
 
+    /// <summary>
+    /// Finds the magnitude of the vector using the Distance Formula
+    /// </summary>
+    /// <returns>The magnitude of the given Vector3</returns>
 	public float Norm ()
 	{
 		return (float)Math.Sqrt (x * x + y * y + z * z);
 	}
 
+    /// <summary>
+    /// Subtracts two vectors x, y, and z coordinate pairs to create a new vector
+    /// </summary>
+    /// <param name="a">Vector to be subtracted from</param>
+    /// <param name="b">Vector to be subtracted by</param>
+    /// <returns>The new vector</returns>
 	public static Vec3f operator - (Vec3f a, Vec3f b)
 	{
 		return new Vec3f { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z };
 	}
 
+    /// <summary>
+    /// Individually divides the x, y, and z coordinates by a number
+    /// </summary>
+    /// <param name="v">The Vector to be divided</param>
+    /// <param name="num">The number to divide the vector by</param>
+    /// <returns>The new vector</returns>
 	public static Vec3f operator / (Vec3f v, float num)
 	{
 		v.x /= num;
@@ -159,6 +186,12 @@ public struct Vec3f
 		return v;
 	}
 
+    /// <summary>
+    /// Individually multiplies the x, y, and z coordinates by a number
+    /// </summary>
+    /// <param name="v">The Vector to be multiplied</param>
+    /// <param name="num">The number to multipy the vector by</param>
+    /// <returns>The new vector</returns>
 	public static Vec3f operator * (Vec3f v, float num)
 	{
 		v.x *= num;
@@ -171,11 +204,27 @@ public struct Vec3f
 
 struct Vec4f
 {
+    /// <summary>
+    /// Distance from the point of origin on the horizontal axis
+    /// </summary>
 	public float x;
+
+    /// <summary>
+    /// Distance from the point of origin on the vertical axis
+    /// </summary>
 	public float y;
+
+    /// <summary>
+    /// Distance from the point of origin on the zed axis
+    /// </summary>
 	public float z;
 	public float h;
 
+    /// <summary>
+    /// Turns the coordinates (x, y, z, w) into an array with x being in the zero position, y in the one position, z in the two position, and h in the 3 position
+    /// </summary>
+    /// <param name="i">The position in the array</param>
+    /// <returns> x in the zero poisiton, y in the second, z in the third</returns>
 	public float this [int i] {
 		get {
 			switch (i) {
@@ -197,10 +246,7 @@ struct Vec4f
 		}
 	}
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
+    
 	public Vec4f Normalize ()
 	{
 		var len = Norm ();
@@ -230,9 +276,22 @@ struct Vec4f
 
 struct Vec2i
 {
+    /// <summary>
+    /// Distance from the point of origin on the horizontal axis
+    /// </summary>
 	public int x;
+
+    /// <summary>
+    /// Distance from the point of origin on the vertical axis
+    /// </summary>
 	public int y;
 
+    /// <summary>
+    /// Subtracts two vectors x, y coordinate pairs to create a new vector
+    /// </summary>
+    /// <param name="a">Vector to be subtracted from</param>
+    /// <param name="b">Vector to be subtracted by</param>
+    /// <returns>The new vector</returns>
 	public static Vec2i operator - (Vec2i a, Vec2i b)
 	{
 		return new Vec2i { x = a.x - b.x, y = a.y - b.y };
@@ -241,10 +300,27 @@ struct Vec2i
 
 struct Vec3i
 {
+    /// <summary>
+    /// Distance from the point of origin on the horizontal axis
+    /// </summary>
 	public int x;
+
+    /// <summary>
+    /// Distance from the point of origin on the vertical axis
+    /// </summary>
 	public int y;
+
+    /// <summary>
+    /// Distance from the point of origin on the zed axis
+    /// </summary>
 	public int z;
 
+    /// <summary>
+    /// Subtracts two vectors x, y, and z coordinate pairs to create a new vector
+    /// </summary>
+    /// <param name="a">Vector to be subtracted from</param>
+    /// <param name="b">Vector to be subtracted by</param>
+    /// <returns>The new vector</returns>
 	public static Vec3i operator - (Vec3i a, Vec3i b)
 	{
 		return new Vec3i { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z };
