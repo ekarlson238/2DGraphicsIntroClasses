@@ -34,9 +34,9 @@ struct Vec2f
 	}
 
     /// <summary>
-    /// Divides by the absolute value to equal zero or one to signify direction
+    /// Divides by the absolute value to equal 1 or -1 to signify direction
     /// </summary>
-    /// <returns> Zero or one to signify direction </returns>
+    /// <returns> 1 or -1 to signify direction </returns>
 	public Vec2f Normalize ()
 	{
 		return this / Norm ();
@@ -147,9 +147,9 @@ public struct Vec3f
 	}
 
     /// <summary>
-    /// Divides by the absolute value to equal zero, one, or two to signify direction
+    /// Divides by the absolute value to equal 1 or -1 to signify direction
     /// </summary>
-    /// <returns> Zero, one, or two to signify direction </returns>
+    /// <returns> 1 or -1 to signify direction </returns>
 	public Vec3f Normalize ()
 	{
 		return this / Norm ();
@@ -225,6 +225,10 @@ struct Vec4f
     /// Distance from the point of origin on the zed axis
     /// </summary>
 	public float z;
+
+    /// <summary>
+    /// the homogeneous vertex coordinate normally called w
+    /// </summary>
 	public float h;
 
     /// <summary>
@@ -253,23 +257,42 @@ struct Vec4f
 		}
 	}
 
-    
+    /// <summary>
+    /// Divides by the absolute value to equal 1 or -1 to signify direction
+    /// </summary>
+    /// <returns> 1 or -1 to signify direction </returns>
 	public Vec4f Normalize ()
 	{
 		var len = Norm ();
 		return this / len;
 	}
 
+    /// <summary>
+    /// Finds the magnitude of the vector using the Distance Formula (absolute value)
+    /// </summary>
+    /// <returns>The magnitude of the given Vector3</returns>
 	public float Norm ()
 	{
 		return (float)Math.Sqrt (x * x + y * y + z * z + h * h);
 	}
 
+    /// <summary>
+    /// subtracts each of vector b's cordinates individually from vector a's
+    /// </summary>
+    /// <param name="a">the vector being subtracted from</param>
+    /// <param name="b">the vector being subtracted</param>
+    /// <returns>a new vector created with the results</returns>
 	public static Vec4f operator - (Vec4f a, Vec4f b)
 	{
 		return new Vec4f { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z, h = a.h - b.h };
 	}
 
+    /// <summary>
+    /// divides each of vector v's cordinates by num
+    /// </summary>
+    /// <param name="v">the vector being divided</param>
+    /// <param name="num">the number that is being used to divide</param>
+    /// <returns>the result of each of vector v's cordinates divided by num</returns>
 	public static Vec4f operator / (Vec4f v, float num)
 	{
 		v.x /= num;
@@ -340,8 +363,17 @@ struct Vec3i
 	}
 }
 
+/// <summary>
+/// A collection of advanced mathematical equations and conversion methods
+/// </summary>
 static class Geometry
 {
+    /// <summary>
+    /// takes the cross product of the 2 vectors
+    /// </summary>
+    /// <param name="l">the first vector</param>
+    /// <param name="r">the second vector</param>
+    /// <returns></returns>
 	public static Vec3f Cross (Vec3f l, Vec3f r)
 	{
 		return new Vec3f {
@@ -351,26 +383,57 @@ static class Geometry
 		};
 	}
 
+    /// <summary>
+    /// the dot product
+    /// multiplies each of the individual respective coordinates then adds those results together
+    /// </summary>
+    /// <param name="l">the first vector</param>
+    /// <param name="r">the second vector</param>
+    /// <returns>the result of multiplying all the coordinates and adding them together</returns>
 	public static float Dot (Vec3f l, Vec3f r)
 	{
 		return l.x * r.x + l.y * r.y + l.z * r.z;
 	}
 
+    /// <summary>
+    /// creates a vector 4 from a vector3 with fill as the h coordinate
+    /// </summary>
+    /// <param name="v">the vector 3 being converted</param>
+    /// <param name="fill">the h value for the new vector4</param>
+    /// <returns> the new vector 4</returns>
 	public static Vec4f Embed4D (Vec3f v, float fill = 1)
 	{
 		return new Vec4f { x = v.x, y = v.y, z = v.z, h = fill };
 	}
 
+    /// <summary>
+    /// converts a vector 3 into a vector 2
+    /// creates the vector 2 with the x and y values of the vector 3
+    /// </summary>
+    /// <param name="v">the vector 3 to convert</param>
+    /// <returns>the new vector 2</returns>
 	public static Vec2f Project2D (Vec3f v)
 	{
 		return new Vec2f { x = v.x, y = v.y };
 	}
 
+    /// <summary>
+    /// converts a vector 4 into a vector 2
+    /// creates the vector 2 with the x and y values of the vector 4
+    /// </summary>
+    /// <param name="v">the vector 4 to convert</param>
+    /// <returns>the new vector 2</returns>
 	public static Vec2f Project2D (Vec4f v)
 	{
 		return new Vec2f { x = v.x, y = v.y };
 	}
 
+    /// <summary>
+    /// converts a vector 4 into a vector 3
+    /// creates the vector 3 with the x and y values of the vector 4
+    /// </summary>
+    /// <param name="v">the vector 4 to convert</param>
+    /// <returns>the new vector 3</returns>
 	public static Vec3f Project3D (Vec4f v)
 	{
 		return new Vec3f { x = v.x, y = v.y, z = v.z };
