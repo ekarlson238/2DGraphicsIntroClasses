@@ -1,6 +1,7 @@
 using System;
+
 /// <summary>
-/// Struct for Vector2 floats which contains classes and operator overloads for handling 2D Vectors
+/// Struct which contains classes and operator overloads for handling 2D Vectors with floating-point values
 /// </summary>
 struct Vec2f
 {
@@ -101,6 +102,9 @@ struct Vec2f
 	}
 }
 
+/// <summary>
+/// Struct which contains classes and operator overloads for handling 3D Vectors with floating-point values
+/// </summary>
 public struct Vec3f
 {
     /// <summary>
@@ -202,6 +206,9 @@ public struct Vec3f
 	}
 }
 
+/// <summary>
+/// Struct which contains classes and operator overloads for handling 4D Vectors with floating-point values
+/// </summary>
 struct Vec4f
 {
     /// <summary>
@@ -274,6 +281,9 @@ struct Vec4f
 	}
 }
 
+/// <summary>
+/// Struct which contains classes and operator overloads for handling 2D Vectors with integer values
+/// </summary>
 struct Vec2i
 {
     /// <summary>
@@ -298,6 +308,9 @@ struct Vec2i
 	}
 }
 
+/// <summary>
+/// Struct which contains classes and operator overloads for handling 3D Vectors with integer values
+/// </summary>
 struct Vec3i
 {
     /// <summary>
